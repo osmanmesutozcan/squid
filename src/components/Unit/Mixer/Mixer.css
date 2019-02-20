@@ -1,0 +1,20 @@
+.squid-microfon-unit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 120px;
+  width: 200px;
+}
+
+.squid-microfonunit-waveform {
+  flex: 1;
+  width: 100%;
+}
+
+.squid-microfonunit-start {
+  height: 55px;
+  width: 55px;
+  padding: 0;
+}

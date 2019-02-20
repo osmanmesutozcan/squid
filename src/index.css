@@ -1,14 +1,42 @@
+/* VARIABLES */
+:root {
+  --squid-color-1: #474143;
+  /* GREY */
+  --squid-color-2: #ffc636;
+  /* YELLOW */
+  --squid-color-3: #00ada9;
+  /* BLUE */
+  --squid-color-4: #ffffff;
+  /* WHITE */
+  --squid-color-5: #ff6444;
+  /* RED */
+  --squid-color-6: #383436;
+  /* DARK GREY */
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--squid-color-1);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* scrollback styling */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--squid-color-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--squid-color-2);
 }

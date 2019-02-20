@@ -1,0 +1,32 @@
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 11px;
+  width: 11px;
+  margin-top: -6px;
+  border: 1px solid var(--squid-color-4);
+  background: var(--squid-color-4);
+  border-radius: 50%;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 1.3px;
+  border: 0.2px solid var(--squid-color-4);
+}
+
+.squid-slider {
+  height: 12px;
+}

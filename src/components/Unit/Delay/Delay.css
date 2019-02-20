@@ -1,0 +1,19 @@
+.squid-delay-unit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 140px;
+  width: 220px;
+}
+
+.squid-delay-unit-inner {
+  width: 80%;
+}
+
+.squid-delay-slider {
+  align-self: flex-end;
+  justify-self: flex-end;
+  margin-bottom: 15px;
+}

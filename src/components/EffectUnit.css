@@ -1,0 +1,73 @@
+.squid-effectunit-container {
+  user-select: none;
+  position: relative;
+
+  width: 10px;
+  height: 10px;
+  margin: 0;
+}
+
+.squid-effectunit {
+  border-radius: 5px;
+  position: relative;
+  background-color: var(--squid-color-6);
+  box-shadow: 0px 0px 10px 0px rgba(56, 52, 54, 1);
+}
+
+.squid-effectunit-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 20px;
+  width: 100%;
+
+  cursor: move;
+  background-color: transparent;
+}
+
+.squid-effectunit-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  height: 10px;
+  width: 10px;
+
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  background: var(--squid-color-5);
+}
+
+.squid-effectunit-connection {
+  z-index: 100;
+  position: absolute;
+  cursor: pointer;
+
+  height: 10px;
+  width: 10px;
+  border: 2px solid var(--squid-color-2);
+  border-radius: 50%;
+  background: var(--squid-color-6);
+}
+
+.squid-effectunit-connection:hover {
+  background: var(--squid-color-2);
+}
+
+.squid-effectunit-connection-active {
+  background: var(--squid-color-2);
+}
+
+/* TODO add this dynamicly from js */
+.squid-effectunit-input {
+  top: 50px;
+  left: -5px;
+}
+
+/* TODO add this dynamicly from js */
+.squid-effectunit-output {
+  top: 50px;
+  right: -5px;
+}

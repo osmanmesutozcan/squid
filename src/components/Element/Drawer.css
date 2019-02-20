@@ -1,0 +1,80 @@
+/* side */
+.squid-drawer-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+  width: 360px;
+
+  z-index: 1;
+  transition: width 0.15s ease-in-out;
+}
+
+.squid-drawer-side-closed {
+  width: 0px;
+}
+
+/* bottom */
+.squid-drawer-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  height: 360px;
+  width: 100%;
+
+  z-index: 1;
+  transition: height 0.15s ease-in-out;
+}
+
+.squid-drawer-bottom-closed {
+  height: 0px;
+}
+
+/* content */
+.squid-drawer-content-side {
+  transition: width 0.15s ease-in-out;
+}
+
+.squid-drawer-content-bottom {
+  transition: height 0.15s ease-in-out;
+}
+
+.squid-drawer-content-side-closed {
+  width: 0;
+  overflow: hidden;
+}
+
+.squid-drawer-content-bottom-closed {
+  height: 0;
+  overflow: hidden;
+}
+
+.squid-drawer-content {
+  height: 100%;
+  width: 100%;
+}
+
+/* toggle button */
+.squid-drawer-toggle-side {
+  top: 10px;
+  right: -70px;
+}
+
+.squid-drawer-toggle-bottom {
+  top: -70px;
+  right: 10px;
+}
+
+.squid-drawer-toggle {
+  position: absolute;
+  border-radius: 50%;
+
+  height: 60px;
+  width: 60px;
+  background: var(--squid-color-6);
+
+  cursor: pointer;
+  box-shadow: 0px 0px 10px 0px rgba(56, 52, 54, 1);
+}

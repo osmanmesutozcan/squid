@@ -1,0 +1,20 @@
+.squid-master-unit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 140px;
+  width: 200px;
+}
+
+.squid-master-waveform {
+  flex: 1;
+  width: 100%;
+}
+
+.squid-master-mute {
+  height: 55px;
+  width: 55px;
+  padding: 0;
+}

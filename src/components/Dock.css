@@ -1,0 +1,22 @@
+.squid-main-dock-container {
+  flex: 1;
+
+  display: block;
+  height: 100%;
+  overflow: scroll;
+}
+
+.squid-main-dock-area {
+  flex: 1;
+  height: 3000px;
+  width: 4000px;
+
+  cursor: grab;
+}
+
+#squid-overlay-main {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  z-index: -100;
+}

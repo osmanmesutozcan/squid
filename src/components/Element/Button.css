@@ -1,0 +1,27 @@
+.squid-button {
+  display: block;
+  border: solid 2px var(--squid-color-4);
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--squid-color-4);
+  padding: 5px 10px;
+  background: transparent;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+.squid-button:focus {
+  outline: 0;
+}
+
+.active {
+  color: var(--squid-color-5);
+  border: solid 3px var(--squid-color-5);
+}
+
+.inactive {
+  /* */
+}
