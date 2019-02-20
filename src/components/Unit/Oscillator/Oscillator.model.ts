@@ -20,13 +20,17 @@ export class OscillatorModel extends EffectUnitStore
   /**
    * Oscillator audio node.
    */
-  private _oscillator = new Tone.Oscillator();
+  private _oscillator: Tone.Oscillator;
   get oscillator() {
     return this._oscillator;
   }
 
   constructor(store: DockStore) {
     super(store, 0, 1);
+
+    this._oscillator = new Tone.Oscillator();
+    this._oscillator.frequency.value = 0;
+    this._oscillator.start();
 
     this.unit = new EffectUnitModel(this);
     this.outputs[0] = new UnitInput(this, this._oscillator, {
@@ -35,9 +39,6 @@ export class OscillatorModel extends EffectUnitStore
         y: 27.5
       }
     });
-
-    this._oscillator.frequency.value = 0;
-    this._oscillator.start();
   }
 
   dispose = () => {

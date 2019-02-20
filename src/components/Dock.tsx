@@ -46,8 +46,8 @@ class Overlay extends React.Component<IOverlayProps> {
     const svg = this.props.store!.dock._svg!;
 
     // match overlay position, offset to dock.
-    svg.style.width = dock.clientWidth.toString();
-    svg.style.height = dock.clientHeight.toString();
+    (svg.style as any).width = 4000;
+    (svg.style as any).height = 3000;
   }
 
   render() {

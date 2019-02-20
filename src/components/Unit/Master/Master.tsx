@@ -35,7 +35,7 @@ class Master extends React.Component<IMasterProps> {
    * handle volume changes.
    */
   _onVolumeChange = (_: any, value: number) => {
-    this.props.model.volume = value;
+    this.props.model.setVolume(value);
   };
 
   render() {

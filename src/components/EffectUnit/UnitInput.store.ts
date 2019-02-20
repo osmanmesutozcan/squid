@@ -124,11 +124,9 @@ export class UnitInput {
    */
   @action
   connect = (input: UnitInput) => {
-    if (!this._isMaster(this.node)) {
-      this.node.connect(input.node);
-    }
-    // keep a referance to the connected
-    // input.
+    (this.node as Tone.AudioNode).connect(input.node);
+
+    // keep a referance to the connected input.
     this.connection = input;
     input.connection = this;
   };
@@ -139,9 +137,7 @@ export class UnitInput {
    */
   @action
   disconnect = (input: UnitInput) => {
-    if (!this._isMaster(this.node)) {
-      this.node.disconnect(input.node);
-    }
+    (this.node as Tone.AudioNode).disconnect(input.node);
 
     // remove all referances
     this.connection = null;

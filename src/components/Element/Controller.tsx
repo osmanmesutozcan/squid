@@ -28,7 +28,7 @@ interface IDraggable {
  */
 @observer
 export class Draggable extends React.Component<IDraggable> {
-  @observable private _moving = false;
+  private _moving = false;
 
   componentDidMount() {
     document.addEventListener("mouseup", this._onMouseUp.bind(this));
@@ -59,7 +59,7 @@ export class Draggable extends React.Component<IDraggable> {
       this.props.onMouseUp(e);
     }
 
-    this.setState({ moving: false });
+    this._moving = false;
   };
 
   _onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -67,7 +67,7 @@ export class Draggable extends React.Component<IDraggable> {
       this.props.start();
     }
 
-    this.setState({ moving: true });
+    this._moving = true;
   };
 
   _onMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

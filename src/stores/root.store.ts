@@ -1,3 +1,4 @@
+import * as Tone from "tone";
 import * as React from "react";
 import { observable, action, computed } from "mobx";
 
@@ -132,8 +133,7 @@ class RootImpl {
   deactivate(uuid: string) {
     this._active.forEach(a => {
       if (a.component.props.model.uuid === uuid) {
-        // TODO: ???
-        // this._active.remove(a);
+        (this._active as any).remove(a);
       }
     });
   }

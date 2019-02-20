@@ -41,16 +41,13 @@ export class MasterModel extends EffectUnitStore implements IEffectUnitStore {
 
   @action
   setVolume(value: number) {
+    this._master.volume.value = value;
     this._volume = value;
   }
 
   @computed
   get volume() {
     return this._volume;
-  }
-  set volume(value) {
-    this._master.volume.value = value;
-    this.setVolume(value);
   }
 
   /**
