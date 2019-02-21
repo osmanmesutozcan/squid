@@ -1,5 +1,4 @@
 import * as React from "react";
-import { observable } from "mobx";
 import { observer } from "mobx-react";
 
 import { SquidProvider, plugin } from "../lib/core";
@@ -16,6 +15,8 @@ import * as Oscillator from "../components/Unit/Oscillator/Oscillator";
 import * as Sequencer from "../components/Unit/Sequencer/Sequencer";
 import * as Recorder from "../components/Unit/Recorder/Recorder";
 import * as Mixer from "../components/Unit/Mixer/Mixer";
+import * as Crusher from "../components/Unit/Crusher/Crusher";
+import * as Phaser from "../components/Unit/Phaser/Phaser";
 
 // activate plugins
 plugin.use([
@@ -26,7 +27,9 @@ plugin.use([
   Oscillator,
   Sequencer,
   Recorder,
-  Mixer
+  Mixer,
+  Crusher,
+  Phaser
 ]);
 
 /**

@@ -62,6 +62,7 @@ export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
   constructor(store: DockStore) {
     super(store);
     this._analyser = new Tone.Waveform(256);
+    this.outputs[0] = new UnitInput(this, this._analyser);
   }
 
   /**
@@ -70,9 +71,6 @@ export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
   init = () => {
     this._microfon = new Tone.UserMedia();
     this._microfon.connect(this._analyser);
-
-    // Detach output #1 to analyser
-    this.outputs[0] = new UnitInput(this, this._analyser);
   };
 
   /**

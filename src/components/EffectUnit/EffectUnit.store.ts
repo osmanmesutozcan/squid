@@ -60,7 +60,8 @@ export class EffectUnitStore {
     this._position = position;
 
     const update = (io: UnitInput) => io.updatePosition();
-    this.inputs.concat(this.outputs).forEach(update);
+    this.inputs.forEach(update);
+    this.outputs.forEach(update);
   };
 
   get position() {
@@ -73,7 +74,8 @@ export class EffectUnitStore {
   // Trigger each node to calculate its own offset relative to its parents.
   updateOffsets = () => {
     const update = (io: UnitInput) => io.updateOffset();
-    this.inputs.concat(this.outputs).forEach(update);
+    this.inputs.forEach(update);
+    this.outputs.forEach(update);
   };
 
   // HELPERS

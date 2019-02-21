@@ -1,0 +1,8 @@
+.squid-crusher-unit {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  height: 120px;
+  width: 200px;
+}
