@@ -12,11 +12,6 @@ export interface IEffectUnitStore {
   uuid: string;
 
   /**
-   * Effect unit core.
-   */
-  unit: EffectUnitModel;
-
-  /**
    * Parent data store.
    */
   store: DockStore;
@@ -37,26 +32,19 @@ export interface IEffectUnitStore {
   dispose: () => void;
 }
 
+/**
+ * EffectUnit base store for commons.
+ */
 export class EffectUnitStore {
   uuid = uuid();
 
+  store: DockStore;
+
+  @observable
   inputs: UnitInput[] = [];
 
+  @observable
   outputs: UnitInput[] = [];
-
-  constructor(public store: DockStore) {}
-}
-
-export class EffectUnitModel {
-  /**
-   * Unique id for this unit.
-   */
-  uuid: string;
-
-  /**
-   * refers to owner Unit.
-   */
-  store: IEffectUnitStore;
 
   /**
    * Current position of this unit.
@@ -68,48 +56,59 @@ export class EffectUnitModel {
   };
 
   @action
-  updatePosition = (position: IPosition) => {
+  updatePositions = (position: IPosition) => {
     this._position = position;
-    this.updateInputs(position);
-    this.updateOutputs(position);
+
+    const update = (io: UnitInput) => io.updatePosition();
+    this.inputs.concat(this.outputs).forEach(update);
   };
 
-  /**
-   * update input nodes of the parent store.
-   */
-  updateInputs = (position: IPosition) => {
-    this.store.inputs.forEach(i => {
-      i.update(position);
-    });
-  };
-
-  /**
-   * update output nodes of the parent store.
-   */
-  updateOutputs = (position: IPosition) => {
-    this.store.outputs.forEach(o => {
-      o.update(position);
-    });
-  };
-
-  @computed
   get position() {
     return this._position;
   }
   set position(position) {
-    this.updatePosition(position);
+    this.updatePositions(position);
   }
+
+  // Trigger each node to calculate its own offset relative to its parents.
+  updateOffsets = () => {
+    const update = (io: UnitInput) => io.updateOffset();
+    this.inputs.concat(this.outputs).forEach(update);
+  };
 
   // HELPERS
   /**
    * Checks if outputs is owned by its parent store.
    */
-  owns = (output: UnitInput) => {
-    return this.store.outputs.some(o => o.id === output.id);
+  owns = (io: UnitInput) => {
+    return this.outputs.some(o => o.id === io.id);
   };
 
-  constructor(store: IEffectUnitStore) {
-    this.store = store;
-    this.uuid = store.uuid;
+  /**
+   * checks if output with given index is connected
+   * or not.
+   */
+  oconnected = (idx: number) => {
+    return computed(
+      () => this.outputs[idx] !== undefined && this.outputs[idx].isConnected
+    );
+  };
+
+  /**
+   * checks if input with given index is connected
+   * or not.
+   */
+  iconnected = (idx: number) => {
+    return computed(
+      () => this.inputs[idx] !== undefined && this.inputs[idx].isConnected
+    );
+  };
+
+  /**
+   * @argument dock {DockStore} Referance to dock store.
+   * @argument unit {UnitStore} Referance to wrapper unit store..
+   */
+  constructor(dock: DockStore) {
+    this.store = dock;
   }
 }

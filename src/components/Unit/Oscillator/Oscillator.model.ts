@@ -1,22 +1,11 @@
 import * as Tone from "tone";
-import {
-  EffectUnitModel,
-  UnitInput,
-  EffectUnitStore,
-  IEffectUnitStore
-} from "../../EffectUnit";
+import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
 import { DockStore } from "../../Dock";
 
 /**
  * Oscillator unit main model.
  */
-export class OscillatorModel extends EffectUnitStore
-  implements IEffectUnitStore {
-  /**
-   * EffectUnitCore
-   */
-  unit: EffectUnitModel;
-
+export class OscModel extends EffectUnitStore implements IEffectUnitStore {
   /**
    * Oscillator audio node.
    */
@@ -32,13 +21,7 @@ export class OscillatorModel extends EffectUnitStore
     this._oscillator.frequency.value = 0;
     this._oscillator.start();
 
-    this.unit = new EffectUnitModel(this);
-    this.outputs[0] = new UnitInput(this, this._oscillator, {
-      offset: {
-        x: 100,
-        y: 27.5
-      }
-    });
+    this.outputs[0] = new UnitInput(this, this._oscillator);
   }
 
   dispose = () => {

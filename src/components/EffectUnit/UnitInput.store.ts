@@ -1,9 +1,9 @@
 import * as uuid from "uuid";
 import * as Tone from "tone";
-import { observable, computed, action, reaction } from "mobx";
+import { observable, action, reaction } from "mobx";
 
 import { IPosition } from "../../lib/position";
-import { IEffectUnitStore } from "./EffectUnit.store";
+import { EffectUnitStore } from "./EffectUnit.store";
 import { Private } from "./EffectUnit";
 
 /**
@@ -18,7 +18,7 @@ export class UnitInput {
   /**
    * Root store.
    */
-  store: IEffectUnitStore;
+  store: EffectUnitStore;
 
   /**
    * this inputs path
@@ -34,17 +34,18 @@ export class UnitInput {
    * Referance to the unit IO this IO is connected to.
    */
   connection: UnitInput | null = null;
-
-  @computed
+  @observable private _isConnected = false;
   get isConnected() {
-    return this.connection !== null;
+    return this._isConnected;
   }
 
   /**
-   * Offset of the IO on
-   * the uni.
+   * Offset of the IO on the unit calculated via dom attributes.
    */
-  offset: IPosition = { x: 0, y: 0 };
+  offset: IPosition = {
+    x: 0,
+    y: 0
+  };
 
   /**
    * position
@@ -59,28 +60,44 @@ export class UnitInput {
    * update inputs position.
    */
   @action
-  update = (position: IPosition) => {
-    this._position = Private.readjustPosition(
-      this.store.unit.position,
-      this.offset
-    );
+  updatePosition = () => {
+    this._position = Private.readjustPosition(this.store.position, this.offset);
   };
 
   get position() {
     return this._position;
   }
 
-  // OUTPUT NODE MOUSE EVENTS
+  /**
+   * update inputs offset
+   */
+  @action
+  updateOffset = () => {
+    const node = document.querySelector(
+      `[data-uuid="${this.id}"]`
+    )! as HTMLDivElement;
+
+    const offsetTop = node.offsetTop + 7;
+    const offsetLeft = (node.offsetParent! as HTMLDivElement).offsetLeft + 7;
+
+    // always negative because the center is top left corner
+    // of the parent.
+    this.offset = { x: offsetLeft, y: offsetTop };
+  };
+
   outputonclick = (e: React.MouseEvent<any, MouseEvent>) => {
-    if (Private.currentInput && !this.store.unit.owns(Private.currentInput)) {
+    if (Private.currentInput && !this.store.owns(Private.currentInput)) {
       let tmp = Private.currentInput;
       Private.currentInput = null;
       this.connect(tmp);
     }
   };
 
-  // INPUT NODE MOUSE EVENTS
+  // INPUT NODE MOUSE EVENTS chore.
+  // to summerize it removes the path svgs between connections
+  // and tries to disconnect them from each other
   inputonclick = (e: React.MouseEvent<any, MouseEvent>) => {
+    // Temporary connection to mouse disconnects.
     if (Private.currentInput) {
       if (Private.currentInput.path!.hasAttribute("d")) {
         Private.currentInput.path!.removeAttribute("d");
@@ -92,8 +109,13 @@ export class UnitInput {
       }
     }
 
+    // connection to other node disconnects..
     Private.currentInput = this;
     if (this.connection) {
+      if (this.connection.path!.hasAttribute("d")) {
+        this.connection.path!.removeAttribute("d");
+      }
+
       this.connection.disconnect(this);
     }
 
@@ -107,11 +129,8 @@ export class UnitInput {
         return;
       }
 
-      let iP = Private.readjustPosition(position, this.offset);
-      let oP = Private.readjustPosition(
-        this.connection.position,
-        this.connection.offset
-      );
+      let iP = position;
+      let oP = this.connection.position;
 
       let s = Private.createPath(iP, oP);
       this.path.setAttributeNS(null, "d", s);
@@ -126,10 +145,13 @@ export class UnitInput {
   @action
   connect = (input: UnitInput) => {
     (this.node as Tone.AudioNode).connect(input.node);
-
     // keep a referance to the connected input.
     this.connection = input;
     input.connection = this;
+
+    // --- ui
+    this._isConnected = true;
+    input._isConnected = true;
   };
 
   /**
@@ -138,12 +160,14 @@ export class UnitInput {
    */
   @action
   disconnect = (input: UnitInput) => {
-    console.log(input);
     (this.node as Tone.AudioNode).disconnect(input.node);
-
     // remove all referances
     this.connection = null;
     input.connection = null;
+
+    // --- ui
+    this._isConnected = false;
+    input._isConnected = false;
   };
 
   /**
@@ -152,20 +176,9 @@ export class UnitInput {
    *      offset {Object} -- offset of the IO relative to unit.
    * }
    */
-  constructor(
-    store: IEffectUnitStore,
-    node: Tone.AudioNode | Tone.Master,
-    { offset = { x: 0, y: 0 } }: { offset: IPosition }
-  ) {
-    if (!store.unit) {
-      throw Error("Parent store does not have a unit assigned to it");
-    }
-
+  constructor(store: EffectUnitStore, node: Tone.AudioNode | Tone.Master) {
     this.node = node;
     this.store = store;
-    this.offset = offset;
-
-    this.update(this.position);
 
     this.path = this._createElement();
     store.store._svg!.appendChild(this.path);
@@ -179,9 +192,5 @@ export class UnitInput {
     path.setAttributeNS(null, "fill", "none");
 
     return path;
-  }
-
-  private _isMaster(node: Tone.AudioNode | Tone.Master): node is Tone.Master {
-    return (<Tone.AudioNode>node).disconnect !== undefined;
   }
 }

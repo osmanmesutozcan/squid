@@ -2,22 +2,12 @@ import * as Tone from "tone";
 import { observable, action, computed } from "mobx";
 
 import { DockStore } from "../../Dock";
-import {
-  EffectUnitModel,
-  UnitInput,
-  IEffectUnitStore,
-  EffectUnitStore
-} from "../../EffectUnit";
+import { UnitInput, IEffectUnitStore, EffectUnitStore } from "../../EffectUnit";
 
 /**
  * Microfon unit local state.
  */
 export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
-  /**
-   * Child store of this unit.
-   */
-  unit: EffectUnitModel;
-
   /**
    * Analyser node.
    */
@@ -71,8 +61,6 @@ export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
 
   constructor(store: DockStore) {
     super(store);
-
-    this.unit = new EffectUnitModel(this);
     this._analyser = new Tone.Waveform(256);
   }
 
@@ -84,12 +72,7 @@ export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
     this._microfon.connect(this._analyser);
 
     // Detach output #1 to analyser
-    this.outputs[0] = new UnitInput(this, this._analyser, {
-      offset: {
-        x: 100,
-        y: 27.5
-      }
-    });
+    this.outputs[0] = new UnitInput(this, this._analyser);
   };
 
   /**

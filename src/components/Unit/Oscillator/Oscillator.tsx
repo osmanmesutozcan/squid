@@ -5,10 +5,10 @@ import { plugin } from "../../../lib/core";
 import { Draggable as Controller } from "../../Element/Controller";
 
 import "./Oscillator.css";
-import { OscillatorModel } from "./Oscillator.model";
+import { OscModel } from "./Oscillator.model";
 
 interface IOscillator {
-  model: OscillatorModel;
+  model: OscModel;
 }
 
 /**
@@ -29,10 +29,7 @@ class Oscillator extends React.Component<IOscillator> {
 
   render() {
     return (
-      <EffectUnit
-        model={this.props.model.unit}
-        className="squid-oscillator-unit"
-      >
+      <EffectUnit model={this.props.model} className="squid-oscillator-unit">
         <Controller
           end={this._endDrag}
           unit={this.props.model.oscillator}
@@ -60,7 +57,7 @@ class Oscillator extends React.Component<IOscillator> {
 const options = {
   id: "squidoriginals:oscillator",
   name: "Oscillator",
-  model: OscillatorModel
+  model: OscModel
 };
 
 export default plugin.register(Oscillator, options);

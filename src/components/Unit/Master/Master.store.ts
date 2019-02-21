@@ -1,19 +1,9 @@
 import * as Tone from "tone";
 import { observable, computed, action } from "mobx";
 import { DockStore } from "../../Dock";
-import {
-  EffectUnitModel,
-  UnitInput,
-  EffectUnitStore,
-  IEffectUnitStore
-} from "../../EffectUnit";
+import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
 
 export class MasterModel extends EffectUnitStore implements IEffectUnitStore {
-  /**
-   * Effect unit core.
-   */
-  unit: EffectUnitModel;
-
   /**
    * Is master output muted.
    */
@@ -63,15 +53,7 @@ export class MasterModel extends EffectUnitStore implements IEffectUnitStore {
   constructor(store: DockStore) {
     super(store);
 
-    // input #1 is the master.
-    this.unit = new EffectUnitModel(this);
-
-    this.inputs[0] = new UnitInput(this, this._master, {
-      offset: {
-        x: 0,
-        y: 27.5
-      }
-    });
+    this.inputs[0] = new UnitInput(this, this._master);
 
     this._master.chain(this._analyser);
     this._master.volume.value = this.volume;

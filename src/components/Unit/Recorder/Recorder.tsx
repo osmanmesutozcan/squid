@@ -23,7 +23,7 @@ class Recorder extends React.Component<IRecorderProps> {
 
   render() {
     return (
-      <EffectUnit model={this.props.model.unit} className="squid-recorder-unit">
+      <EffectUnit model={this.props.model} className="squid-recorder-unit">
         <Button
           className="squid-recordunit-start"
           type="active"

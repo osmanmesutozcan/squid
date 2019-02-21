@@ -3,21 +3,12 @@ import { observable, action, reaction, IReactionDisposer } from "mobx";
 
 import { Recorder } from "../../../lib/media";
 import { DockStore } from "../../Dock";
-import {
-  EffectUnitModel,
-  UnitInput,
-  EffectUnitStore,
-  IEffectUnitStore
-} from "../../EffectUnit";
-import { start } from "repl";
+import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
 
 /**
  * Oscillator unit main model.
  */
 export class RecorderModel extends EffectUnitStore implements IEffectUnitStore {
-  // Core unit
-  unit: EffectUnitModel;
-
   // Audio stream record util.
   private _recorder = new Recorder((Tone as any).context);
 
@@ -63,21 +54,8 @@ export class RecorderModel extends EffectUnitStore implements IEffectUnitStore {
   constructor(store: DockStore) {
     super(store);
 
-    this.unit = new EffectUnitModel(this);
-
-    this.inputs[0] = new UnitInput(this, this._recorder.destination as any, {
-      offset: {
-        x: 0,
-        y: 12.5
-      }
-    });
-
-    this.outputs[0] = new UnitInput(this, this._player, {
-      offset: {
-        x: 100,
-        y: 12.5
-      }
-    });
+    this.inputs[0] = new UnitInput(this, this._recorder.destination as any);
+    this.outputs[0] = new UnitInput(this, this._player);
 
     this._recordRectionDispose = reaction(
       () => this._recording,

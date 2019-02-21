@@ -43,7 +43,7 @@ class Master extends React.Component<IMasterProps> {
     const buttonType = model.mute ? "active" : "inactive";
 
     return (
-      <EffectUnit model={model.unit} className="squid-master-unit">
+      <EffectUnit model={model} className="squid-master-unit">
         <WaveForm
           className="squid-master-waveform"
           analyser={model._analyser}

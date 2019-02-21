@@ -22,7 +22,7 @@ class Mixer extends React.Component<IMixerProps> {
 
   render() {
     return (
-      <EffectUnit model={this.props.model.unit} className="squid-mixer-unit">
+      <EffectUnit model={this.props.model} className="squid-mixer-unit">
         MiX
       </EffectUnit>
     );

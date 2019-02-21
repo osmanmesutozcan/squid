@@ -32,7 +32,7 @@ class Microfon extends React.Component<IMicrofonProps> {
     const buttonType = model.opened ? "active" : "inactive";
 
     return (
-      <EffectUnit model={model.unit} className="squid-microfon-unit">
+      <EffectUnit model={model} className="squid-microfon-unit">
         <WaveForm
           className="squid-microfonunit-waveform"
           analyser={model.analyser}

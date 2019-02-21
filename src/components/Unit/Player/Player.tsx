@@ -31,7 +31,7 @@ class Player extends React.Component<IPlayerProps> {
 
   render() {
     return (
-      <EffectUnit model={this.props.model.unit} className="squid-player-unit">
+      <EffectUnit model={this.props.model} className="squid-player-unit">
         <form
           onSubmit={e => {
             e.preventDefault();

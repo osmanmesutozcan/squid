@@ -2,23 +2,13 @@ import * as Tone from "tone";
 import { observable, computed, action } from "mobx";
 
 import { DockStore } from "../../Dock";
-import {
-  EffectUnitModel,
-  UnitInput,
-  EffectUnitStore,
-  IEffectUnitStore
-} from "../../EffectUnit";
+import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
 
 export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
   /**
    * Master output audio node.
    */
   private _delay: Tone.FeedbackDelay;
-
-  /**
-   * Effect unit core.
-   */
-  unit: EffectUnitModel;
 
   /**
    * Length of the delay.
@@ -81,27 +71,14 @@ export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
   constructor(store: DockStore) {
     super(store);
 
-    this.unit = new EffectUnitModel(this);
-
     this._delay = new Tone.FeedbackDelay({
       delayTime: this.delayTime,
       feedback: this.feedback,
       wet: this.wet
     });
 
-    this.inputs[0] = new UnitInput(this, this._delay, {
-      offset: {
-        x: 0,
-        y: 27.5
-      }
-    });
-
-    this.outputs[0] = new UnitInput(this, this._delay, {
-      offset: {
-        x: 100,
-        y: 27.5
-      }
-    });
+    this.inputs[0] = new UnitInput(this, this._delay);
+    this.outputs[0] = new UnitInput(this, this._delay);
   }
 
   dispose = () => {

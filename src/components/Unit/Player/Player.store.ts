@@ -1,10 +1,5 @@
 import * as Tone from "tone";
-import {
-  EffectUnitModel,
-  UnitInput,
-  EffectUnitStore,
-  IEffectUnitStore
-} from "../../EffectUnit";
+import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
 import { DockStore } from "../../Dock";
 
 const CLIENT_ID = "client_id=YeB1O6rbKc9vlNIbA4ghoAxzOoGLK6fZ";
@@ -16,11 +11,6 @@ const SOUNDCLOUD_RESOLVE = (perma: string) =>
  * Oscillator unit main model.
  */
 export class PlayerModel extends EffectUnitStore implements IEffectUnitStore {
-  /**
-   * Effect unit core.
-   */
-  unit: EffectUnitModel;
-
   /**
    * Audio source node.
    */
@@ -44,7 +34,6 @@ export class PlayerModel extends EffectUnitStore implements IEffectUnitStore {
 
   constructor(store: DockStore) {
     super(store);
-    this.unit = new EffectUnitModel(this);
   }
 
   init = (player: HTMLAudioElement) => {
@@ -52,12 +41,7 @@ export class PlayerModel extends EffectUnitStore implements IEffectUnitStore {
 
     this._source = (Tone as any).context.createMediaElementSource(this.player);
 
-    this.outputs[0] = new UnitInput(this, this._source, {
-      offset: {
-        x: 200,
-        y: 27.5
-      }
-    });
+    this.outputs[0] = new UnitInput(this, this._source);
   };
 
   dispose = () => {

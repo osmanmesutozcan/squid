@@ -3,23 +3,12 @@ import { observable, action } from "mobx";
 
 import { IMIDIKeyEvent, IControlKeyEvent } from "../../../lib/keyboard";
 import { DockStore } from "../../Dock";
-import {
-  EffectUnitStore,
-  IEffectUnitStore,
-  EffectUnitModel,
-  UnitInput
-} from "../../EffectUnit";
+import { EffectUnitStore, IEffectUnitStore, UnitInput } from "../../EffectUnit";
 
 /**
  * Sequencer unit main model.
  */
-export class SequencerModel extends EffectUnitStore
-  implements IEffectUnitStore {
-  /**
-   * Effect unit core.
-   */
-  unit: EffectUnitModel;
-
+export class SqcrModel extends EffectUnitStore implements IEffectUnitStore {
   /**
    * Display model.
    */
@@ -45,14 +34,7 @@ export class SequencerModel extends EffectUnitStore
 
     this.display = new DisplayModel();
 
-    this.unit = new EffectUnitModel(this);
-
-    this.outputs[0] = new UnitInput(this, this._synth, {
-      offset: {
-        x: 100,
-        y: 27.5
-      }
-    });
+    this.outputs[0] = new UnitInput(this, this._synth);
 
     this._disposeOnMIDILayoutDown = this.store.root.keyboard.onMIDILayoutDown(
       this._handleMIDIKeysDown

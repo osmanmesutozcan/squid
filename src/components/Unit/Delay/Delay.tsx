@@ -42,7 +42,7 @@ class Delay extends React.Component<IDelayProps> {
     const { model } = this.props;
 
     return (
-      <EffectUnit model={model.unit} className="squid-delay-unit">
+      <EffectUnit model={model} className="squid-delay-unit">
         <div className="squid-delay-unit-inner">
           <Slider
             className="squid-delay-slider"

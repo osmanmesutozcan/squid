@@ -30,17 +30,10 @@ plugin.use([
 ]);
 
 /**
- * Main application state store.
- */
-class SquidStore {
-  @observable test = {};
-}
-
-/**
  * Main application page component.
  */
 @observer
-class Squid extends React.Component<{ store: SquidStore }> {
+class Squid extends React.Component {
   render() {
     return (
       <SquidProvider className="squid-main-application-container">
@@ -53,4 +46,3 @@ class Squid extends React.Component<{ store: SquidStore }> {
 }
 
 export default Squid;
-export { SquidStore };

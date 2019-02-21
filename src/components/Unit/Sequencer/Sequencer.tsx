@@ -4,10 +4,10 @@ import { observer } from "mobx-react";
 import "./Sequencer.css";
 import { plugin } from "../../../lib/core";
 import { EffectUnit } from "../../EffectUnit";
-import { SequencerModel } from "./Sequencer.store";
+import { SqcrModel } from "./Sequencer.store";
 
 interface ISequencerProps {
-  model: SequencerModel;
+  model: SqcrModel;
 }
 
 /**
@@ -21,10 +21,7 @@ class Sequencer extends React.Component<ISequencerProps> {
 
   render() {
     return (
-      <EffectUnit
-        model={this.props.model.unit}
-        className="squid-sequencer-unit"
-      >
+      <EffectUnit model={this.props.model} className="squid-sequencer-unit">
         <SequencerDisplay model={this.props.model} />
       </EffectUnit>
     );
@@ -32,7 +29,7 @@ class Sequencer extends React.Component<ISequencerProps> {
 }
 
 interface ISequencerDisplayProps {
-  model: SequencerModel;
+  model: SqcrModel;
 }
 
 @observer
@@ -69,7 +66,7 @@ class SequencerDisplay extends React.Component<ISequencerDisplayProps> {
 const options = {
   id: "squidoriginals:sequencer",
   name: "Sequencer",
-  model: SequencerModel
+  model: SqcrModel
 };
 
 export default plugin.register(Sequencer, options);

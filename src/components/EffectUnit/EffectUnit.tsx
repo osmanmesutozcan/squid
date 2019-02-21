@@ -8,15 +8,15 @@ import { Root } from "../../stores/root.store";
 
 import "./EffectUnit.css";
 import { UnitInput } from "./UnitInput.store";
-import { EffectUnitModel } from "./EffectUnit.store";
-import { Inputs, Output } from "./UnitInput";
+import { EffectUnitStore } from "./EffectUnit.store";
+import { Inputs, Outputs } from "./UnitInput";
 
 interface IEffectUnitProps {
   className?: string;
 
   store?: typeof Root;
 
-  model: EffectUnitModel;
+  model: EffectUnitStore;
 }
 
 /**
@@ -28,6 +28,10 @@ export class EffectUnit extends React.Component<IEffectUnitProps> {
   componentDidMount() {
     window.addEventListener("mousemove", Private.onmousemove);
     window.addEventListener("click", Private.onclick);
+
+    // tell model to initialize all offset values.
+    this.props.model.updateOffsets();
+    this.props.model.updatePositions(this.props.model.position);
   }
 
   componentWillUnmount() {
@@ -39,7 +43,7 @@ export class EffectUnit extends React.Component<IEffectUnitProps> {
    * Mutate state on drag event.
    */
   handleDrag = (_: any, position: IPosition) => {
-    this.props.model.updatePosition({
+    this.props.model.updatePositions({
       x: position.x,
       y: position.y
     });
@@ -49,7 +53,7 @@ export class EffectUnit extends React.Component<IEffectUnitProps> {
    * Deactivate a unit.
    */
   deactivate = () => {
-    this.props.store!.deactivate(this.props.model.store.uuid);
+    this.props.store!.deactivate(this.props.model.store.id);
   };
 
   render() {
@@ -73,13 +77,13 @@ export class EffectUnit extends React.Component<IEffectUnitProps> {
             </div>
 
             {// render INPUT nodes
-            this.props.model.store.inputs.length > 0 ? (
-              <Inputs model={this.props.model} />
+            this.props.model.inputs.length > 0 ? (
+              <Inputs store={this.props.model} />
             ) : null}
 
             {// render OUTPUT nodes
-            this.props.model.store.outputs.length > 0 ? (
-              <Output model={this.props.model} />
+            this.props.model.outputs.length > 0 ? (
+              <Outputs store={this.props.model} />
             ) : null}
 
             {this.props.children}
@@ -130,16 +134,15 @@ export class Private {
    * Handle temporary path events.
    */
   static onmousemove(e: MouseEvent) {
-    if (Private.currentInput) {
-      let p = Private.currentInput.path!;
-
-      let iP = Private.readjustPosition(
-        Private.currentInput.position,
-        Private.currentInput.offset
-      );
-
+    if (
+      Private.currentInput &&
+      (e.target! as HTMLElement).id === "squid-main-dock-area"
+    ) {
+      let iP = Private.currentInput.position;
       let oP = { x: e.offsetX, y: e.offsetY };
+
       let s = Private.createPath(iP, oP);
+      let p = Private.currentInput.path!;
       p.setAttributeNS(null, "d", s);
     }
   }

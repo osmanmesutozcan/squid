@@ -1,12 +1,9 @@
 import * as React from "react";
-
-import Squid, { SquidStore } from "./pages/Squid";
-
-const store = new SquidStore();
+import Squid from "./pages/Squid";
 
 class App extends React.Component {
   render() {
-    return <Squid store={store} />;
+    return <Squid />;
   }
 }
 

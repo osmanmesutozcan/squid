@@ -1,32 +1,33 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 
-import { EffectUnitModel } from "./EffectUnit.store";
+import { EffectUnitStore } from "./EffectUnit.store";
+import { UnitInput } from "./UnitInput.store";
 
-interface IInputProps {
+interface IOutputProps {
   idx: number;
-  model: EffectUnitModel;
+  model: UnitInput;
 }
 
 @observer
-class Input extends React.Component<IInputProps> {
-  onclick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    this.props.model.store.inputs[this.props.idx].inputonclick(e);
-  };
-
+class Input extends React.Component<IOutputProps> {
   render() {
+    const cn = `squid-effectunit-connection squid-effectunit-input ${
+      this.props.model.isConnected ? "squid-effectunit-connection-active" : ""
+    }`;
+
     return (
       <div
-        data-uuid={this.props.model.store.uuid}
-        onClick={this.onclick}
-        className="squid-effectunit-connection squid-effectunit-input"
+        data-uuid={this.props.model.id}
+        onClick={this.props.model.inputonclick}
+        className={cn}
       />
     );
   }
 }
 
 interface IInputsProps {
-  model: EffectUnitModel;
+  store: EffectUnitStore;
 }
 
 /**
@@ -40,50 +41,53 @@ export class Inputs extends React.Component<IInputsProps> {
         className="squid-effectunit-inputs-container"
         style={{ left: "-7px" }}
       >
-        {this.props.model.store.inputs.map((_: any, idx: number) => (
-          <Input key={Math.random()} idx={idx} model={this.props.model} />
+        {this.props.store.inputs.map((model: UnitInput, idx: number) => (
+          <Input key={Math.random()} idx={idx} model={model} />
         ))}
       </div>
     );
   }
 }
 
+// --- OUTPUTS
+
 interface IOutputProps {
-  model: EffectUnitModel;
+  idx: number;
+  model: UnitInput;
 }
 
-/**
- * Node output element.
- *
- * For now there can only be single output per unit.
- */
 @observer
-export class Output extends React.Component<IOutputProps> {
-  onclick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    // If needed multiple outputs this should be written
-    // the same way as input is.
-    this.props.model.store.outputs[0].outputonclick(e);
-  };
-
+class Output extends React.Component<IOutputProps> {
   render() {
-    const { outputs } = this.props.model.store;
-    const className = `squid-effectunit-connection squid-effectunit-output ${
-      outputs.length > 0 && outputs[0] && outputs[0].isConnected
-        ? "squid-effectunit-connection-active"
-        : ""
+    const cn = `squid-effectunit-connection squid-effectunit-output ${
+      this.props.model.isConnected ? "squid-effectunit-connection-active" : ""
     }`;
 
+    return (
+      <div
+        data-uuid={this.props.model.id}
+        onClick={this.props.model.outputonclick}
+        className={cn}
+      />
+    );
+  }
+}
+
+interface IOutputsProps {
+  store: EffectUnitStore;
+}
+
+@observer
+export class Outputs extends React.Component<IOutputsProps> {
+  render() {
     return (
       <div
         className="squid-effectunit-inputs-container"
         style={{ right: "-7px" }}
       >
-        <span
-          data-uuid={this.props.model.store.uuid}
-          onClick={this.onclick}
-          id={"outputnode:0"}
-          className={className}
-        />
+        {this.props.store.outputs.map((o: UnitInput, idx: number) => (
+          <Output key={Math.random()} model={o} idx={idx} />
+        ))}
       </div>
     );
   }
