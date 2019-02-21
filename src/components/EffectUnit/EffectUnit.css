@@ -2,8 +2,8 @@
   user-select: none;
   position: relative;
 
-  width: 10px;
-  height: 10px;
+  width: 0;
+  height: 0;
   margin: 0;
 }
 
@@ -42,7 +42,6 @@
 
 .squid-effectunit-connection {
   z-index: 100;
-  position: absolute;
   cursor: pointer;
 
   height: 10px;
@@ -60,14 +59,13 @@
   background: var(--squid-color-2);
 }
 
-/* TODO add this dynamicly from js */
-.squid-effectunit-input {
-  top: 50px;
-  left: -5px;
-}
+.squid-effectunit-inputs-container {
+  position: absolute;
 
-/* TODO add this dynamicly from js */
-.squid-effectunit-output {
-  top: 50px;
-  right: -5px;
+  height: 100%;
+  width: 14px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }

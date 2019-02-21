@@ -26,7 +26,7 @@ export class OscillatorModel extends EffectUnitStore
   }
 
   constructor(store: DockStore) {
-    super(store, 0, 1);
+    super(store);
 
     this._oscillator = new Tone.Oscillator();
     this._oscillator.frequency.value = 0;

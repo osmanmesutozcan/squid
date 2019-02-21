@@ -1,0 +1,15 @@
+.squid-recorder-unit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 120px;
+  width: 200px;
+}
+
+.squid-recordunit-start {
+  height: 55px !important;
+  width: 55px !important;
+  padding: 0;
+}

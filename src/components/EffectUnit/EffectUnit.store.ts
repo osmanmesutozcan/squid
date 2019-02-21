@@ -24,13 +24,11 @@ export interface IEffectUnitStore {
   /**
    * Number of outputs of the defined effect unit
    */
-  output: number;
   outputs: UnitInput[];
 
   /**
    * Number of inputs of the defined effect unit
    */
-  input: number;
   inputs: UnitInput[];
 
   /**
@@ -46,11 +44,7 @@ export class EffectUnitStore {
 
   outputs: UnitInput[] = [];
 
-  constructor(
-    public store: DockStore,
-    public input: number,
-    public output: number
-  ) {}
+  constructor(public store: DockStore) {}
 }
 
 export class EffectUnitModel {
@@ -110,14 +104,8 @@ export class EffectUnitModel {
   /**
    * Checks if outputs is owned by its parent store.
    */
-  owns = (input: UnitInput) => {
-    for (let i = 0; i < this.store.input; i++) {
-      if (this.store.outputs[i].id === input.id) {
-        return true;
-      }
-    }
-
-    return false;
+  owns = (output: UnitInput) => {
+    return this.store.outputs.some(o => o.id === output.id);
   };
 
   constructor(store: IEffectUnitStore) {

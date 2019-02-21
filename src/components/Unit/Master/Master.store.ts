@@ -61,7 +61,7 @@ export class MasterModel extends EffectUnitStore implements IEffectUnitStore {
   _master = Tone.Master;
 
   constructor(store: DockStore) {
-    super(store, 1, 0);
+    super(store);
 
     // input #1 is the master.
     this.unit = new EffectUnitModel(this);

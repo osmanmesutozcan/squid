@@ -19,6 +19,12 @@ interface IPlayerProps {
 class Player extends React.Component<IPlayerProps> {
   @observable private _keyword = "";
 
+  private _audio: HTMLAudioElement | null = null;
+
+  componentDidMount() {
+    this.props.model.init(this._audio!);
+  }
+
   componentWillUnmount() {
     this.props.model.dispose();
   }
@@ -41,7 +47,7 @@ class Player extends React.Component<IPlayerProps> {
           />
         </form>
 
-        <audio ref={this.init} controls crossOrigin="true">
+        <audio ref={n => (this._audio = n)} controls crossOrigin="true">
           <source src={this.props.model.source} />
         </audio>
       </EffectUnit>

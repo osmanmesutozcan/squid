@@ -73,12 +73,12 @@ export class EffectUnit extends React.Component<IEffectUnitProps> {
             </div>
 
             {// render INPUT nodes
-            this.props.model.store.input > 0 ? (
+            this.props.model.store.inputs.length > 0 ? (
               <Inputs model={this.props.model} />
             ) : null}
 
             {// render OUTPUT nodes
-            this.props.model.store.output > 0 ? (
+            this.props.model.store.outputs.length > 0 ? (
               <Output model={this.props.model} />
             ) : null}
 

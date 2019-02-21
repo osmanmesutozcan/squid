@@ -16,7 +16,7 @@ class Input extends React.Component<IInputProps> {
 
   render() {
     return (
-      <span
+      <div
         data-uuid={this.props.model.store.uuid}
         onClick={this.onclick}
         className="squid-effectunit-connection squid-effectunit-input"
@@ -36,11 +36,14 @@ interface IInputsProps {
 export class Inputs extends React.Component<IInputsProps> {
   render() {
     return (
-      <React.Fragment>
+      <div
+        className="squid-effectunit-inputs-container"
+        style={{ left: "-7px" }}
+      >
         {this.props.model.store.inputs.map((_: any, idx: number) => (
           <Input key={Math.random()} idx={idx} model={this.props.model} />
         ))}
-      </React.Fragment>
+      </div>
     );
   }
 }
@@ -71,12 +74,17 @@ export class Output extends React.Component<IOutputProps> {
     }`;
 
     return (
-      <span
-        data-uuid={this.props.model.store.uuid}
-        onClick={this.onclick}
-        id={"outputnode:0"}
-        className={className}
-      />
+      <div
+        className="squid-effectunit-inputs-container"
+        style={{ right: "-7px" }}
+      >
+        <span
+          data-uuid={this.props.model.store.uuid}
+          onClick={this.onclick}
+          id={"outputnode:0"}
+          className={className}
+        />
+      </div>
     );
   }
 }

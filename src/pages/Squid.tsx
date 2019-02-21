@@ -14,10 +14,20 @@ import * as Delay from "../components/Unit/Delay/Delay";
 import * as Microfon from "../components/Unit/Microfon/Microfon";
 import * as Oscillator from "../components/Unit/Oscillator/Oscillator";
 import * as Sequencer from "../components/Unit/Sequencer/Sequencer";
-import { Root } from "../stores/root.store";
+import * as Recorder from "../components/Unit/Recorder/Recorder";
+import * as Mixer from "../components/Unit/Mixer/Mixer";
 
 // activate plugins
-plugin.use([Master, Player, Delay, Microfon, Oscillator, Sequencer]);
+plugin.use([
+  Master,
+  Player,
+  Delay,
+  Microfon,
+  Oscillator,
+  Sequencer,
+  Recorder,
+  Mixer
+]);
 
 /**
  * Main application state store.

@@ -1,7 +1,7 @@
 import * as Tone from "tone";
 import { observable, action } from "mobx";
 
-import { IMIDIKeyEvent } from "../../../lib/keyboard";
+import { IMIDIKeyEvent, IControlKeyEvent } from "../../../lib/keyboard";
 import { DockStore } from "../../Dock";
 import {
   EffectUnitStore,
@@ -41,7 +41,7 @@ export class SequencerModel extends EffectUnitStore
   });
 
   constructor(store: DockStore) {
-    super(store, 0, 1);
+    super(store);
 
     this.display = new DisplayModel();
 
@@ -60,22 +60,30 @@ export class SequencerModel extends EffectUnitStore
     this._disposeOnMIDILayoutUp = this.store.root.keyboard.onMIDILayoutUp(
       this._handleMIDIKeysUp
     );
+    this._disposeOnControlLayoutDown = this.store.root.keyboard.onControlLayoutDown(
+      this._handleNextPosition
+    );
   }
 
   // --- Record
   _keydownMap = new Map<string, undefined>();
 
   _handleMIDIKeysDown = (e: IMIDIKeyEvent) => {
-    if (this._keydownMap.has(e.note)) {
-      return;
+    if (!this._keydownMap.has(e.note)) {
+      this._keydownMap.set(e.note, undefined);
+      this._synth.triggerAttack(e.note);
     }
-
-    this._keydownMap.set(e.note, undefined);
-    this._synth.triggerAttack(e.note);
   };
+
   _handleMIDIKeysUp = (e: IMIDIKeyEvent) => {
     this._keydownMap.delete(e.note);
     this._synth.triggerRelease();
+  };
+
+  _handleNextPosition = (e: IControlKeyEvent) => {
+    if (e.key === "ArrowRight") {
+      this.display.increment();
+    }
   };
 
   // --- Playback
@@ -84,6 +92,7 @@ export class SequencerModel extends EffectUnitStore
   // Keyboard event disposables
   _disposeOnMIDILayoutDown: Function;
   _disposeOnMIDILayoutUp: Function;
+  _disposeOnControlLayoutDown: Function;
 
   dispose = () => {
     this._synth.dispose();
@@ -99,21 +108,28 @@ class DisplayModel {
 
   @observable position = 0;
 
-  @action
-  setPosition = (position: number) => {
+  @action private _setPosition = (position: number) => {
     this.position = position % 16;
   };
+
+  increment() {
+    this._setPosition(this.position + 1);
+  }
+
+  constructor() {
+    this.loop = new Tone.Loop(() => {
+      this._setPosition(this.position + 1);
+    }, "16n");
+
+    this.loop.start(0);
+
+    // sync display with transport
+    Tone.Transport.on("stop", action(() => (this.position = 0)));
+    Tone.Transport.on("start", action(() => (this.position = 0)));
+  }
 
   dispose = () => {
     this.loop.stop(0);
     this.loop.cancel();
   };
-
-  constructor() {
-    this.loop = new Tone.Loop(() => {
-      this.setPosition(this.position + 1);
-    }, "16n");
-
-    this.loop.start(0);
-  }
 }

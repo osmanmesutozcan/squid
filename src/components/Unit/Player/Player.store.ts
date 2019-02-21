@@ -43,7 +43,7 @@ export class PlayerModel extends EffectUnitStore implements IEffectUnitStore {
   }
 
   constructor(store: DockStore) {
-    super(store, 0, 1);
+    super(store);
     this.unit = new EffectUnitModel(this);
   }
 
@@ -61,6 +61,6 @@ export class PlayerModel extends EffectUnitStore implements IEffectUnitStore {
   };
 
   dispose = () => {
-    this._source.dispose();
+    //
   };
 }

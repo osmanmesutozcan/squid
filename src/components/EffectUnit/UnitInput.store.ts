@@ -96,6 +96,7 @@ export class UnitInput {
     if (this.connection) {
       this.connection.disconnect(this);
     }
+
     e.stopPropagation();
   };
 
@@ -137,6 +138,7 @@ export class UnitInput {
    */
   @action
   disconnect = (input: UnitInput) => {
+    console.log(input);
     (this.node as Tone.AudioNode).disconnect(input.node);
 
     // remove all referances

@@ -70,7 +70,7 @@ export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
   };
 
   constructor(store: DockStore) {
-    super(store, 0, 1);
+    super(store);
 
     this.unit = new EffectUnitModel(this);
     this._analyser = new Tone.Waveform(256);

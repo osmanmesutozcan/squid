@@ -79,7 +79,7 @@ export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
   }
 
   constructor(store: DockStore) {
-    super(store, 1, 1);
+    super(store);
 
     this.unit = new EffectUnitModel(this);
 
