@@ -170,12 +170,6 @@ export class UnitInput {
     input._isConnected = false;
   };
 
-  /**
-   * node {AudioNode}
-   * {
-   *      offset {Object} -- offset of the IO relative to unit.
-   * }
-   */
   constructor(store: EffectUnitStore, node: Tone.AudioNode | Tone.Master) {
     this.node = node;
     this.store = store;

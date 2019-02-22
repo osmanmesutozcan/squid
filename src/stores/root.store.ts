@@ -1,9 +1,7 @@
-import * as Tone from "tone";
 import * as React from "react";
 import { observable, action, computed } from "mobx";
 
 import { DockStore } from "../components/Dock";
-import { IEffectUnitStore } from "../components/EffectUnit";
 
 import { Playback } from "./playback.store";
 import { Keyboard } from "./keyboard.store";

@@ -16,12 +16,12 @@ export class Playback {
    */
   @observable _bpm = 106;
 
+  @observable _status = PlaybackStatus.PAUSE;
+
   @action.bound
   set bpm(value: number) {
     this._bpm = value;
   }
-
-  @observable _status = PlaybackStatus.PAUSE;
 
   constructor(store: typeof Root) {
     this.store = store;
