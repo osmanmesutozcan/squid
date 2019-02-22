@@ -13,16 +13,13 @@ export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
   /**
    * Length of the delay.
    */
-  @observable
-  _delayTime = 0.2;
+  @observable _delayTime = 0.2;
 
-  @action
-  setDelayTime = (value: number) => {
-    this._delay.delayTime.value = value;
+  @action setDelayTime = (value: number) => {
+    this._delay.delayTime.exponentialRampTo(value, 0.05);
     this._delayTime = value;
   };
-  @computed
-  get delayTime(): number {
+  @computed get delayTime(): number {
     return this._delayTime;
   }
   set delayTime(value: number) {
@@ -32,12 +29,11 @@ export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
   /**
    * wetness
    */
-  @observable
-  _wet = 0.4;
+  @observable _wet = 0.4;
 
   @action
   setWet = (value: number) => {
-    this._delay.wet.value = value;
+    this._delay.wet.exponentialRampTo(value, 0.05);
     this._wet = value;
   };
   @computed
@@ -52,16 +48,13 @@ export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
    * Amount of the output the is feed back into the
    * input.
    */
-  @observable
-  _feedback = 0.3;
+  @observable _feedback = 0.3;
 
-  @action
-  setFeedback = (value: number) => {
-    this._delay.feedback.value = value;
+  @action setFeedback = (value: number) => {
+    this._delay.feedback.exponentialRampTo(value, 0.05);
     this._feedback = value;
   };
-  @computed
-  get feedback() {
+  @computed get feedback() {
     return this._feedback;
   }
   set feedback(value) {

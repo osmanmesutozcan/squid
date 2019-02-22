@@ -73,8 +73,7 @@
 
   height: 60px;
   width: 60px;
-  background: var(--squid-color-6);
+  background: var(--squid-color-1);
 
   cursor: pointer;
-  box-shadow: 0px 0px 10px 0px rgba(56, 52, 54, 1);
 }

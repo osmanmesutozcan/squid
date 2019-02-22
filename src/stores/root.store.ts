@@ -132,7 +132,7 @@ class RootImpl {
   @action
   deactivate(uuid: string) {
     this._active.forEach(a => {
-      if (a.component.props.model.uuid === uuid) {
+      if (a.component.props.model.store.id === uuid) {
         (this._active as any).remove(a);
       }
     });

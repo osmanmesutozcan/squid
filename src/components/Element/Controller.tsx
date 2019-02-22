@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import "./Controller.css";
-import { observable } from "mobx";
 import { observer } from "mobx-react";
+import styled from "styled-components";
+import { PitchShift } from "tone";
 
 type EventTargetWithOffset = EventTarget & {
   offsetWidth: number;
@@ -10,24 +10,26 @@ type EventTargetWithOffset = EventTarget & {
 };
 
 interface IDraggable {
-  params: any;
-  unit: any;
-
   // Runs when drag starts;
   start?: Function;
   // Runs when drag ends;
   end?: Function;
 
+  params: any;
+  unit: any;
+
   onMouseUp?: Function;
   onMouseDown?: Function;
   onMouseMose?: Function;
+
+  className?: string;
 }
 
 /**
  * Draggable control area
  */
 @observer
-export class Draggable extends React.Component<IDraggable> {
+class DraggableBase extends React.Component<IDraggable> {
   private _moving = false;
 
   componentDidMount() {
@@ -111,10 +113,17 @@ export class Draggable extends React.Component<IDraggable> {
   render() {
     return (
       <div
-        className="squid-draggable-area"
+        className={this.props.className}
         onMouseMove={e => this._moving && this._onMouseMove(e)}
         onMouseDown={this._onMouseDown.bind(this)}
       />
     );
   }
 }
+
+// -- Styles
+
+export const Draggable = styled(DraggableBase)`
+  height: 100%;
+  width: 100%;
+`;

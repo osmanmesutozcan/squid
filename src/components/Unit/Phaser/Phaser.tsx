@@ -15,7 +15,7 @@ interface IPhaserProps {
  * Main application page component.
  */
 @observer
-class Phaser extends React.Component<IPhaserProps> {
+export class Phaser extends React.Component<IPhaserProps> {
   componentWillUnmount() {
     this.props.model.dispose();
   }
