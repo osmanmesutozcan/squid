@@ -2967,7 +2967,10 @@ declare module "tone" {
 
     interface NoiseSynthOptions {
       noise: { type: NoiseType };
+      volume?: Encoding.Decibels;
+      filter?: FilterOptions;
       envelope?: ADSREnvelopeOptions;
+      filterEnvelope?: FrequencyEnvelopeOptions;
     }
 
     /**

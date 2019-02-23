@@ -15,9 +15,9 @@ class MetronomModel {
   toggle = () => {
     this.running = !this.running;
     if (this.running) {
-      Tone.Transport.start();
+      Tone.Transport.start(0);
     } else {
-      Tone.Transport.stop();
+      Tone.Transport.stop(0);
     }
   };
 

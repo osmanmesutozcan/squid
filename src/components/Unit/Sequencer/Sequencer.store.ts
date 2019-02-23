@@ -1,117 +1,164 @@
 import * as Tone from "tone";
 import { observable, action } from "mobx";
 
-import { IMIDIKeyEvent, IControlKeyEvent } from "../../../lib/keyboard";
+import { IControlKeyEvent } from "../../../lib/keyboard";
 import { EffectUnitStore, IEffectUnitStore, UnitInput } from "../../EffectUnit";
 import { Root } from "../../../stores/root.store";
+
+import { bassDrum } from "./instruments/BassDrum";
+import { openHihat } from "./instruments/OpenHiHat";
+import { closedHiHat } from "./instruments/ClosedHiHat";
 
 /**
  * Sequencer unit main model.
  */
 export class SqcrModel extends EffectUnitStore implements IEffectUnitStore {
   /**
-   * Display model.
+   * Sequencer output.
    */
-  display: DisplayModel;
+  private _gain = new Tone.Gain(1);
 
   /**
-   * Synth audio node.
+   * Display model.
    */
-  private _synth = new Tone.Synth({
-    oscillator: {
-      type: "triangle"
-    },
-    envelope: {
-      attack: 0.005,
-      decay: 0.1,
-      sustain: 0.3,
-      release: 1
-    }
-  });
+  looper: LooperModel = new LooperModel(this._gain);
 
   constructor(root: typeof Root) {
     super(root);
 
-    this.display = new DisplayModel();
+    this.outputs[0] = new UnitInput(this, this._gain as any);
 
-    this.outputs[0] = new UnitInput(this, this._synth);
-
-    this._disposeOnMIDILayoutDown = root.keyboard.onMIDILayoutDown(
-      this._handleMIDIKeysDown
-    );
-    this._disposeOnMIDILayoutUp = root.keyboard.onMIDILayoutUp(
-      this._handleMIDIKeysUp
-    );
     this._disposeOnControlLayoutDown = root.keyboard.onControlLayoutDown(
       this._handleNextPosition
     );
   }
 
-  // --- Record
-  _keydownMap = new Map<string, undefined>();
-
-  _handleMIDIKeysDown = (e: IMIDIKeyEvent) => {
-    if (!this._keydownMap.has(e.note)) {
-      this._keydownMap.set(e.note, undefined);
-      this._synth.triggerAttack(e.note, "+0.001");
-    }
-  };
-
-  _handleMIDIKeysUp = (e: IMIDIKeyEvent) => {
-    this._keydownMap.delete(e.note);
-    this._synth.triggerRelease("+0.001");
-  };
-
   _handleNextPosition = (e: IControlKeyEvent) => {
     if (e.key === "ArrowRight") {
-      this.display.increment();
+      this.looper.increment();
     }
   };
 
-  // --- Playback
-  // ...
-
   // Keyboard event disposables
-  _disposeOnMIDILayoutDown: Function;
-  _disposeOnMIDILayoutUp: Function;
   _disposeOnControlLayoutDown: Function;
 
   dispose = () => {
-    this._synth.dispose();
-    this._disposeOnMIDILayoutDown();
-    this._disposeOnMIDILayoutUp();
-
-    this.display.dispose();
+    this._disposeOnControlLayoutDown();
+    this.looper.dispose();
   };
 }
 
-class DisplayModel {
-  loop: Tone.Loop;
+/**
+ * This syncs with transport and updates display and record state
+ */
+class LooperModel {
+  private _sequence: Tone.Sequence;
 
-  @observable position = 0;
+  // Referances to instruments
+  _bassDrum = bassDrum();
+  _openHiHat = openHihat();
+  _closedHiHat = closedHiHat();
+
+  /**
+   * Synth audio nodes trigger methods.
+   * Synths have different methods to trigger
+   *
+   * - 0 -> BassDrum
+   * - 1 -> Open HiHat
+   */
+  private _synths = [
+    (t: any, d: any, n: any) => this._bassDrum.triggerAttackRelease(n, d, t),
+    (t: any, d: any, n: any) => this._openHiHat.triggerAttack(t),
+    (t: any, d: any, n: any) => this._closedHiHat.triggerAttack(t)
+  ];
+
+  /**
+   * Notes to trigger on each synth.
+   *
+   * - 0 -> BassDrum
+   * - 1 -> Open HiHat
+   */
+  private _notes = ["C2", "N/A"];
+
+  /**
+   * Hi hat filter.
+   */
+  private _filter = new Tone.Filter({ frequency: 14000 });
+
+  /**
+   * Each map in array represents a bar and
+   * notes are registered in the map.
+   */
+  @observable
+  registered: Map<number, number>[] = Array(16)
+    .fill(null)
+    .map(() => new Map());
+
+  /**
+   * Currently selected intrument
+   */
+  @observable instrument = 0;
+
+  /**
+   * Position of the
+   */
+  @observable position = -1;
+  increment = () => this._setPosition(this.position + 1);
+
+  @action
+  toggleNote = (idx: number) => {
+    if (this.registered[idx].has(this.instrument)) {
+      this.registered[idx].delete(this.instrument);
+    } else {
+      this.registered[idx].set(this.instrument, this.instrument);
+    }
+  };
+
+  constructor(private _gain: Tone.Gain) {
+    this._bassDrum.connect(this._gain);
+    this._openHiHat.chain(this._filter, this._gain);
+    this._closedHiHat.chain(this._filter, this._gain);
+
+    this._sequence = new Tone.Sequence(
+      this._loopNextTick,
+      this.registered as any,
+      "16n"
+    );
+
+    // sync display with transport
+    Tone.Transport.on(
+      "stop",
+      action(() => {
+        this.position = -1;
+        this._sequence.stop(0);
+      })
+    );
+
+    Tone.Transport.on(
+      "start",
+      action(() => {
+        this.position = 0;
+        this._sequence.start(0);
+      })
+    );
+  }
 
   @action private _setPosition = (position: number) => {
     this.position = position % 16;
   };
 
-  increment() {
-    this._setPosition(this.position + 1);
-  }
+  private _loopNextTick = (t: any) => {
+    this.registered[this.position.valueOf()].forEach(i => {
+      this._synths[i](t, "8n", this._notes[i]);
+    });
 
-  constructor() {
-    this.loop = new Tone.Loop(() => {
+    Tone.Draw.schedule(() => {
       this._setPosition(this.position + 1);
-    }, "16n");
-
-    this.loop.start(0);
-
-    // sync display with transport
-    Tone.Transport.on("stop", action(() => (this.position = 0)));
-    Tone.Transport.on("start", action(() => (this.position = 0)));
-  }
+    }, t);
+  };
 
   dispose = () => {
-    this.loop.stop(0);
-    this.loop.cancel();
+    this._sequence.stop(0);
+    this._sequence.cancel();
   };
 }

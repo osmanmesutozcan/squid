@@ -111,7 +111,6 @@ class KnobBase extends React.Component<IKnobProps> {
 
     if (deltaRotation === 0) {
       this._currentYCache = e.pageY - deltaY;
-      console.log(this._currentYCache, deltaY);
     }
     if (deltaRotation !== 0) {
       this._rotation = rotation;

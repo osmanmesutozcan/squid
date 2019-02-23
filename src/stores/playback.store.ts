@@ -14,7 +14,7 @@ export class Playback {
   /**
    * BPM.
    */
-  @observable _bpm = 106;
+  @observable _bpm = 127;
 
   @observable _status = PlaybackStatus.PAUSE;
 
