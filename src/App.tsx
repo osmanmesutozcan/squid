@@ -1,6 +1,9 @@
 import * as React from "react";
-import Squid from "./pages/Squid";
+import { observer } from "mobx-react";
+import { hot } from "react-hot-loader/root";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
+
+import Squid from "./pages/Squid";
 
 const color = {
   grey: "#474143",
@@ -13,7 +16,12 @@ const color = {
   darkerBlue: "#13161F"
 };
 
+const font = {
+  label: "12px"
+};
+
 export const theme = {
+  font,
   color
 };
 
@@ -55,6 +63,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
+@observer
 class App extends React.Component {
   render() {
     return (
@@ -68,4 +77,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default hot(App);

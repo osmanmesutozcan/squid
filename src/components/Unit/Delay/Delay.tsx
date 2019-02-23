@@ -38,6 +38,7 @@ class Delay extends React.Component<IDelayProps> {
           <Knob
             min={0}
             max={1}
+            step={0.01}
             label="Delay"
             radius={32}
             color="white"
@@ -46,6 +47,7 @@ class Delay extends React.Component<IDelayProps> {
           <Knob
             min={0}
             max={1}
+            step={0.01}
             label="Dry/Wet"
             radius={32}
             color="white"
@@ -54,6 +56,7 @@ class Delay extends React.Component<IDelayProps> {
           <Knob
             min={0}
             max={1}
+            step={0.01}
             label="Feedback"
             radius={32}
             color="white"

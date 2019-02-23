@@ -1,0 +1,16 @@
+---
+name: Mixer
+---
+
+import { Playground } from "docz";
+import { inject } from "mobx-react";
+import { Mixer } from "./Mixer";
+import { MixerModel } from "./Mixer.store";
+
+<Playground>
+  {() => {
+    const Injected = inject('store')((props) => <Mixer model={new MixerModel(props.store)}/>);
+    return <Injected />
+  }}
+
+</Playground>

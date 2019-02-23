@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 import { observable, computed, action } from "mobx";
 
-import { DockStore } from "../Dock";
+import { Root } from "../../stores/root.store";
 import { IPosition } from "../../lib/position";
 import { UnitInput } from "./UnitInput.store";
 
@@ -12,9 +12,9 @@ export interface IEffectUnitStore {
   uuid: string;
 
   /**
-   * Parent data store.
+   * Referance to the root store.
    */
-  store: DockStore;
+  root: typeof Root;
 
   /**
    * Number of outputs of the defined effect unit
@@ -37,8 +37,6 @@ export interface IEffectUnitStore {
  */
 export class EffectUnitStore {
   uuid = uuid();
-
-  store: DockStore;
 
   @observable
   inputs: UnitInput[] = [];
@@ -106,11 +104,5 @@ export class EffectUnitStore {
     );
   };
 
-  /**
-   * @argument dock {DockStore} Referance to dock store.
-   * @argument unit {UnitStore} Referance to wrapper unit store..
-   */
-  constructor(dock: DockStore) {
-    this.store = dock;
-  }
+  constructor(public root: typeof Root) {}
 }

@@ -1,7 +1,7 @@
 import * as Tone from "tone";
 import { observable, computed, action } from "mobx";
-import { DockStore } from "../../Dock";
 import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
+import { Root } from "../../../stores/root.store";
 
 export class MasterModel extends EffectUnitStore implements IEffectUnitStore {
   /**
@@ -50,8 +50,8 @@ export class MasterModel extends EffectUnitStore implements IEffectUnitStore {
    */
   _master = Tone.Master;
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
 
     this.inputs[0] = new UnitInput(this, this._master);
 

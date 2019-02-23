@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
 import { DockStore } from "../../Dock";
+import { Root } from "../../../stores/root.store";
 
 const CLIENT_ID = "client_id=YeB1O6rbKc9vlNIbA4ghoAxzOoGLK6fZ";
 const STREAM_SRC = (source: string) => `${source}?${CLIENT_ID}`;
@@ -32,8 +33,8 @@ export class PlayerModel extends EffectUnitStore implements IEffectUnitStore {
     this.player!.src = STREAM_SRC(data.stream_url);
   }
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
   }
 
   init = (player: HTMLAudioElement) => {

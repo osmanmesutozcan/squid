@@ -67,7 +67,7 @@ export class WaveForm extends React.Component<IWaveFormProps> {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.beginPath();
     ctx.lineJoin = "round";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.strokeStyle = "white";
     ctx.moveTo(0, ((values[0] + 1) / 2) * canvasHeight);
     for (var i = 1, len = values.length; i < len; i++) {
@@ -83,6 +83,6 @@ export class WaveForm extends React.Component<IWaveFormProps> {
   render() {
     const className = classname([this.props.className!]);
 
-    return <canvas ref="canvas" height="65" className={className} />;
+    return <canvas ref="canvas" className={className} />;
   }
 }

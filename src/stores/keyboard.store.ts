@@ -50,17 +50,18 @@ export class Keyboard {
   onControlLayoutUp = this._onControlLayoutDown.event;
 
   /**
-   * Currently unit which is permitted to react to the keyboard events.
-   * This is nothing but a convinience property.
+   * Current midi octave.
    */
-  @observable
-  _boundUnit = undefined;
-  get boundUnit() {
-    return this._boundUnit;
-  }
-  @action.bound
-  set boundUnit(uuid) {
-    this._boundUnit = uuid;
+  private _octave = 3;
+  private set octave(value: number) {
+    if (value < 1) {
+      value = 2;
+    }
+    if (value > 5) {
+      value = 5;
+    }
+
+    this._octave = value;
   }
 
   _setupListeners = () => {
@@ -93,27 +94,52 @@ export class Keyboard {
           return ctrlemitter.emit(ctrl("ArrowRight"));
 
         case "q":
-        case "w":
-        case "e":
         case "r":
-        case "t":
-        case "y":
+        case "i":
           return;
 
+        case "[":
+          return type === "down" && (this.octave = this._octave - 1);
+        case "]":
+          return type === "down" && (this.octave = this._octave + 1);
+
+        case "w":
+          return midiemitter.emit(midi(`C#${this._octave}`));
+        case "e":
+          return midiemitter.emit(midi(`D#${this._octave}`));
+        case "t":
+          return midiemitter.emit(midi(`F#${this._octave}`));
+        case "y":
+          return midiemitter.emit(midi(`G#${this._octave}`));
+        case "u":
+          return midiemitter.emit(midi(`A#${this._octave}`));
+        case "o":
+          return midiemitter.emit(midi(`C#${this._octave + 1}`));
+        case "p":
+          return midiemitter.emit(midi(`D#${this._octave + 1}`));
+
         case "a":
-          return midiemitter.emit(midi("C4"));
+          return midiemitter.emit(midi(`C${this._octave}`));
         case "s":
-          return midiemitter.emit(midi("D4"));
+          return midiemitter.emit(midi(`D${this._octave}`));
         case "d":
-          return midiemitter.emit(midi("E4"));
+          return midiemitter.emit(midi(`E${this._octave}`));
         case "f":
-          return midiemitter.emit(midi("F4"));
+          return midiemitter.emit(midi(`F${this._octave}`));
         case "g":
-          return midiemitter.emit(midi("G4"));
+          return midiemitter.emit(midi(`G${this._octave}`));
         case "h":
-          return midiemitter.emit(midi("A4"));
+          return midiemitter.emit(midi(`A${this._octave}`));
         case "j":
-          return midiemitter.emit(midi("B4"));
+          return midiemitter.emit(midi(`B${this._octave}`));
+        case "k":
+          return midiemitter.emit(midi(`C${this._octave + 1}`));
+        case "l":
+          return midiemitter.emit(midi(`D${this._octave + 1}`));
+        case ";":
+          return midiemitter.emit(midi(`E${this._octave + 1}`));
+        case "'":
+          return midiemitter.emit(midi(`F${this._octave + 1}`));
       }
     };
   };

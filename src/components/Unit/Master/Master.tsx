@@ -50,13 +50,12 @@ class Master extends React.Component<IMasterProps> {
         />
 
         <Button
+          label={"Mute"}
           className="squid-master-mute"
           type={buttonType}
           shape="round"
           onClick={this._handleButton}
-        >
-          {model.mute ? "UNM" : "M"}
-        </Button>
+        />
 
         <Slider
           min={-60}

@@ -1,7 +1,7 @@
 import * as Tone from "tone";
 
-import { DockStore } from "../../Dock";
 import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
+import { Root } from "../../../stores/root.store";
 
 /**
  * Oscillator unit main model.
@@ -13,8 +13,8 @@ export class CrusherModel extends EffectUnitStore implements IEffectUnitStore {
     this._crusher.dispose();
   };
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
 
     this.inputs[0] = new UnitInput(this, this._crusher);
     this.outputs[0] = new UnitInput(this, this._crusher);

@@ -53,7 +53,7 @@ export class EffectUnit extends React.Component<IEffectUnitProps> {
    * Deactivate a unit.
    */
   deactivate = () => {
-    this.props.store!.deactivate(this.props.model.store.id);
+    this.props.store!.deactivate(this.props.model.uuid);
   };
 
   render() {

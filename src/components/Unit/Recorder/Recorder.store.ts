@@ -4,6 +4,7 @@ import { observable, action, reaction, IReactionDisposer } from "mobx";
 import { Recorder } from "../../../lib/media";
 import { DockStore } from "../../Dock";
 import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
+import { Root } from "../../../stores/root.store";
 
 /**
  * Oscillator unit main model.
@@ -51,8 +52,8 @@ export class RecorderModel extends EffectUnitStore implements IEffectUnitStore {
     this._player.dispose();
   };
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
 
     this.inputs[0] = new UnitInput(this, this._recorder.destination as any);
     this.outputs[0] = new UnitInput(this, this._player);

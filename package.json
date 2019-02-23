@@ -130,6 +130,7 @@
   "devDependencies": {
     "@types/uuid": "^3.4.4",
     "docz": "^0.13.7",
-    "docz-theme-default": "^0.13.7"
+    "docz-theme-default": "^0.13.7",
+    "react-hot-loader": "^4.7.1"
   }
 }

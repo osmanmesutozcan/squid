@@ -175,7 +175,7 @@ export class UnitInput {
     this.store = store;
 
     this.path = this._createElement();
-    store.store._svg!.appendChild(this.path);
+    store.root.dock._svg!.appendChild(this.path);
   }
 
   private _createElement(): SVGPathElement {

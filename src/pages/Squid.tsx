@@ -17,6 +17,7 @@ import * as Recorder from "../components/Unit/Recorder/Recorder";
 import * as Mixer from "../components/Unit/Mixer/Mixer";
 import * as Crusher from "../components/Unit/Crusher/Crusher";
 import * as Phaser from "../components/Unit/Phaser/Phaser";
+import * as Mezosphere from "../components/Unit/Mezosphere/Mezosphere";
 
 // activate plugins
 plugin.use([
@@ -29,7 +30,8 @@ plugin.use([
   Recorder,
   Mixer,
   Crusher,
-  Phaser
+  Phaser,
+  Mezosphere
 ]);
 
 /**

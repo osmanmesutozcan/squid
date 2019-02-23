@@ -83,7 +83,7 @@ class DraggableBase extends React.Component<IDraggable> {
    * @param {String | Number} value new value of the param.
    */
   _setValue = (param: string, value: any) => {
-    this.props.unit[param].value = value;
+    this.props.unit[param].exponentialRampTo(value, 0.001);
   };
 
   /**

@@ -2,8 +2,8 @@ import * as Tone from "tone";
 import { observable, action } from "mobx";
 
 import { IMIDIKeyEvent, IControlKeyEvent } from "../../../lib/keyboard";
-import { DockStore } from "../../Dock";
 import { EffectUnitStore, IEffectUnitStore, UnitInput } from "../../EffectUnit";
+import { Root } from "../../../stores/root.store";
 
 /**
  * Sequencer unit main model.
@@ -29,20 +29,20 @@ export class SqcrModel extends EffectUnitStore implements IEffectUnitStore {
     }
   });
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
 
     this.display = new DisplayModel();
 
     this.outputs[0] = new UnitInput(this, this._synth);
 
-    this._disposeOnMIDILayoutDown = this.store.root.keyboard.onMIDILayoutDown(
+    this._disposeOnMIDILayoutDown = root.keyboard.onMIDILayoutDown(
       this._handleMIDIKeysDown
     );
-    this._disposeOnMIDILayoutUp = this.store.root.keyboard.onMIDILayoutUp(
+    this._disposeOnMIDILayoutUp = root.keyboard.onMIDILayoutUp(
       this._handleMIDIKeysUp
     );
-    this._disposeOnControlLayoutDown = this.store.root.keyboard.onControlLayoutDown(
+    this._disposeOnControlLayoutDown = root.keyboard.onControlLayoutDown(
       this._handleNextPosition
     );
   }
@@ -53,13 +53,13 @@ export class SqcrModel extends EffectUnitStore implements IEffectUnitStore {
   _handleMIDIKeysDown = (e: IMIDIKeyEvent) => {
     if (!this._keydownMap.has(e.note)) {
       this._keydownMap.set(e.note, undefined);
-      this._synth.triggerAttack(e.note);
+      this._synth.triggerAttack(e.note, "+0.001");
     }
   };
 
   _handleMIDIKeysUp = (e: IMIDIKeyEvent) => {
     this._keydownMap.delete(e.note);
-    this._synth.triggerRelease();
+    this._synth.triggerRelease("+0.001");
   };
 
   _handleNextPosition = (e: IControlKeyEvent) => {

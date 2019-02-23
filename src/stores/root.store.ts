@@ -1,6 +1,7 @@
 import * as React from "react";
 import { observable, action, computed } from "mobx";
 
+import { IEffectUnitStore } from "../components/EffectUnit";
 import { DockStore } from "../components/Dock";
 
 import { Playback } from "./playback.store";
@@ -108,7 +109,7 @@ class RootImpl {
   @action
   activate = (_plugin: any) => {
     const { options } = _plugin;
-    const model = new options.model(this.dock);
+    const model: IEffectUnitStore = new options.model(this);
 
     let entry = Object.assign(
       {
@@ -130,7 +131,7 @@ class RootImpl {
   @action
   deactivate(uuid: string) {
     this._active.forEach(a => {
-      if (a.component.props.model.store.id === uuid) {
+      if (a.component.props.model.uuid === uuid) {
         (this._active as any).remove(a);
       }
     });

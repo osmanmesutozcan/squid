@@ -2,10 +2,12 @@ import * as React from "react";
 import styled from "styled-components";
 import { observable, action } from "mobx";
 import { observer } from "mobx-react";
+import { Label } from "./Label";
 
 interface IKnobProps {
   min: number;
   max: number;
+  step?: number;
   label: string;
   color: string;
   radius: number;
@@ -14,10 +16,10 @@ interface IKnobProps {
   onChange?: (value: number) => void;
 }
 
+// TODO: Remove calculations from here.
 @observer
 class KnobBase extends React.Component<IKnobProps> {
   private _dial: HTMLDivElement | null = null;
-  private _currentY = 0;
 
   @observable private _dialing = false;
   @observable private _rotation = -132;
@@ -60,7 +62,7 @@ class KnobBase extends React.Component<IKnobProps> {
         />
 
         {/* Label Stuff */}
-        <h5 className="knob-label">{this.props.label || null}</h5>
+        <Label className="knob-label" title={this.props.label} />
 
         {/* SVG path */}
         <svg className="dial-svg" viewBox="0 0 100 100">
@@ -78,6 +80,51 @@ class KnobBase extends React.Component<IKnobProps> {
     );
   }
 
+  private _currentYCache = 0;
+
+  @action private _handleMouseDown = (e: MouseEvent) => {
+    this._currentYCache = e.pageY;
+    this._dialing = true;
+  };
+
+  @action private _handleMouseMove = (e: MouseEvent) => {
+    if (!this._dialing) {
+      return;
+    }
+
+    e.preventDefault();
+
+    this._setRotation(e, this.props.step);
+
+    this._setValue();
+  };
+
+  @action private _setRotation = (e: MouseEvent, step: number = 1) => {
+    const { min, max } = this.props;
+
+    const deltaY = e.pageY - this._currentYCache;
+    const stepPercentage = (step * 100) / (max - min);
+    const stepRad = (264 / 100) * stepPercentage;
+    const stepFn = deltaY < 0 ? Math.round : Math.ceil;
+    const deltaRotation = stepFn(deltaY / stepRad) * stepRad;
+    const rotation = this._rotation - deltaRotation;
+
+    if (deltaRotation === 0) {
+      this._currentYCache = e.pageY - deltaY;
+      console.log(this._currentYCache, deltaY);
+    }
+    if (deltaRotation !== 0) {
+      this._rotation = rotation;
+      this._currentYCache = e.pageY;
+    }
+    if (rotation >= 132) {
+      this._rotation = 132;
+    }
+    if (rotation <= -132) {
+      this._rotation = -132;
+    }
+  };
+
   @action private _setValue = () => {
     const percentage = ((this._rotation + 132) / 264) * 100;
     const window = this.props.max - this.props.min;
@@ -94,36 +141,6 @@ class KnobBase extends React.Component<IKnobProps> {
       this.props.onChange(res);
     }
   };
-
-  @action private _handleMouseDown = (e: MouseEvent) => {
-    this._currentY = e.pageY;
-    this._dialing = true;
-  };
-
-  @action private _handleMouseMove = (e: MouseEvent) => {
-    if (!this._dialing) {
-      return;
-    }
-
-    e.preventDefault();
-
-    if (e.pageY - this._currentY !== 0) {
-      this._rotation -= e.pageY - this._currentY;
-    }
-
-    this._currentY = e.pageY;
-
-    // Setting Max rotation
-    if (this._rotation >= 132) {
-      this._rotation = 132;
-    }
-
-    if (this._rotation <= -132) {
-      this._rotation = -132;
-    }
-
-    this._setValue();
-  };
 }
 
 // --- Styled
@@ -139,13 +156,14 @@ export const Knob = styled(KnobBase)`
 
   .knob-label {
     position: absolute;
-    bottom: -10px;
+    bottom: -5px;
     margin: 0;
     color: ${({ theme }) => theme.color.white};
     user-select: none;
   }
 
   .dial-value {
+    font-size: ${({ theme }) => theme.font.label};
     position: absolute;
     transition: color 0.3s cubic-bezier(0, 0, 0.24, 1);
   }

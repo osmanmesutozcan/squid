@@ -1,8 +1,8 @@
 import * as Tone from "tone";
 import { observable, action, computed } from "mobx";
 
-import { DockStore } from "../../Dock";
 import { UnitInput, IEffectUnitStore, EffectUnitStore } from "../../EffectUnit";
+import { Root } from "../../../stores/root.store";
 
 /**
  * Microfon unit local state.
@@ -59,8 +59,8 @@ export class MicrofonModel extends EffectUnitStore implements IEffectUnitStore {
     this._opened = false;
   };
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
     this._analyser = new Tone.Waveform(256);
     this.outputs[0] = new UnitInput(this, this._analyser);
   }

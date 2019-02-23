@@ -1,8 +1,8 @@
 import * as Tone from "tone";
 import { observable, computed, action } from "mobx";
 
-import { DockStore } from "../../Dock";
 import { UnitInput, EffectUnitStore, IEffectUnitStore } from "../../EffectUnit";
+import { Root } from "../../../stores/root.store";
 
 export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
   /**
@@ -61,8 +61,8 @@ export class DelayModel extends EffectUnitStore implements IEffectUnitStore {
     this.setFeedback(value);
   }
 
-  constructor(store: DockStore) {
-    super(store);
+  constructor(root: typeof Root) {
+    super(root);
 
     this._delay = new Tone.FeedbackDelay({
       delayTime: this.delayTime,
