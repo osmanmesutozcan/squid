@@ -7,7 +7,15 @@ import { Root } from "../../../stores/root.store";
  * Oscillator unit main model.
  */
 export class CrusherModel extends EffectUnitStore implements IEffectUnitStore {
-  private _crusher = new Tone.BitCrusher(1);
+  private _crusher = new Tone.BitCrusher(8);
+
+  setWet = (value: number) => {
+    this._crusher.wet.exponentialRampTo(value, 0.001);
+  };
+
+  setBitRate = (value: number) => {
+    this._crusher.bits = value;
+  };
 
   dispose = () => {
     this._crusher.dispose();

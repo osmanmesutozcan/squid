@@ -1,7 +1,6 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 
-import "./Sequencer.css";
 import { plugin } from "../../../lib/core";
 import { EffectUnit } from "../../EffectUnit";
 import { SqcrModel } from "./Sequencer.store";
@@ -27,7 +26,7 @@ class SequencerBase extends React.Component<ISequencerProps> {
       <EffectUnit model={this.props.model} className={this.props.className}>
         <Knob
           min={0}
-          max={2}
+          max={3}
           step={1}
           radius={36}
           color="#ffffff"
@@ -40,7 +39,7 @@ class SequencerBase extends React.Component<ISequencerProps> {
   }
 
   private _getLabel = (i: number) => {
-    return ["BD", "OH", "CH"][i];
+    return ["BD", "OH", "CH", "SD"][i];
   };
 }
 
@@ -125,7 +124,7 @@ class KeyboardButton extends React.Component<IKeyboardButtonProps> {
 const Sequencer = styled(SequencerBase)`
   --unit-width: 512px;
 
-  height: 240px;
+  height: 120px;
   width: var(--unit-width);
 
   .squid-sequencer-keyboard {

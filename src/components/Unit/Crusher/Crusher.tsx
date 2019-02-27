@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 
 import { plugin } from "../../../lib/core";
 import { EffectUnit } from "../../EffectUnit";
+import { Knob } from "../../Element/Knob";
 
 import "./Crusher.css";
 import { CrusherModel } from "./Crusher.store";
@@ -23,7 +24,15 @@ class Crusher extends React.Component<ICrushserProps> {
   render() {
     return (
       <EffectUnit model={this.props.model} className="squid-crusher-unit">
-        CRUSH ME
+        <Knob
+          min={1}
+          max={8}
+          step={0.001}
+          radius={32}
+          color="#ffffff"
+          label="Bitrate"
+          onChange={val => this.props.model.setBitRate(val)}
+        />
       </EffectUnit>
     );
   }

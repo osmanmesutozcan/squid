@@ -4,6 +4,8 @@ import { IMIDIKeyEvent } from "../../../lib/keyboard";
 import { EffectUnitStore, IEffectUnitStore, UnitInput } from "../../EffectUnit";
 import { Root } from "../../../stores/root.store";
 
+export enum SythType {}
+
 /**
  * Sequencer unit main model.
  */
@@ -14,8 +16,20 @@ export class MezosphereModel extends EffectUnitStore
    */
   private _synth = new Tone.PolySynth(8, Tone.Synth);
 
+  setSyth1Type = (
+    sourceType: string,
+    baseType: string,
+    partialCount: number
+  ) => {
+    this._synth.voices.forEach(v =>
+      v.oscillator.set({ type: `${sourceType}${baseType}${partialCount}` })
+    );
+  };
+
   constructor(root: typeof Root) {
     super(root);
+
+    this._synth.voices.forEach(v => v.oscillator.set({ volume: -10 }));
 
     this._synth.set("envelope.attack", 0.4);
     this._synth.set("envelope.sustain", 1);

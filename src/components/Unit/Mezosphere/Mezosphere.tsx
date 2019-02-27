@@ -5,6 +5,7 @@ import "./Mezosphere.css";
 import { plugin } from "../../../lib/core";
 import { EffectUnit } from "../../EffectUnit";
 import { MezosphereModel } from "./Mezosphere.store";
+import { Knob } from "../../Element/Knob";
 
 interface IMezosphereProps {
   model: MezosphereModel;
@@ -15,6 +16,8 @@ interface IMezosphereProps {
  */
 @observer
 class Sequencer extends React.Component<IMezosphereProps> {
+  private _types = ["fmsquare", "fatsquare"];
+
   componentWillUnmount() {
     this.props.model.dispose();
   }
@@ -22,7 +25,17 @@ class Sequencer extends React.Component<IMezosphereProps> {
   render() {
     return (
       <EffectUnit model={this.props.model} className="squid-sequencer-unit">
-        Mezos
+        <Knob
+          min={0}
+          max={1}
+          step={1}
+          radius={32}
+          label="type"
+          color="#ffffff"
+          onChange={val =>
+            this.props.model.setSyth1Type(this._types[val], "", 4)
+          }
+        />
       </EffectUnit>
     );
   }

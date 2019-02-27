@@ -8,6 +8,7 @@ import { Root } from "../../../stores/root.store";
 import { bassDrum } from "./instruments/BassDrum";
 import { openHihat } from "./instruments/OpenHiHat";
 import { closedHiHat } from "./instruments/ClosedHiHat";
+import { snareDrum } from "./instruments/SnareDrum";
 
 /**
  * Sequencer unit main model.
@@ -58,6 +59,7 @@ class LooperModel {
   _bassDrum = bassDrum();
   _openHiHat = openHihat();
   _closedHiHat = closedHiHat();
+  _snareDrum = snareDrum();
 
   /**
    * Synth audio nodes trigger methods.
@@ -69,7 +71,8 @@ class LooperModel {
   private _synths = [
     (t: any, d: any, n: any) => this._bassDrum.triggerAttackRelease(n, d, t),
     (t: any, d: any, n: any) => this._openHiHat.triggerAttack(t),
-    (t: any, d: any, n: any) => this._closedHiHat.triggerAttack(t)
+    (t: any, d: any, n: any) => this._closedHiHat.triggerAttack(t),
+    (t: any, d: any, n: any) => this._snareDrum.triggerAttack(t)
   ];
 
   /**
@@ -78,12 +81,11 @@ class LooperModel {
    * - 0 -> BassDrum
    * - 1 -> Open HiHat
    */
-  private _notes = ["C2", "N/A"];
+  private _notes = ["C2", "N/A", "N/A"];
 
-  /**
-   * Hi hat filter.
-   */
-  private _filter = new Tone.Filter({ frequency: 14000 });
+  // Some LP filters
+  private _filter11 = new Tone.Filter({ frequency: 11000 });
+  private _filter14 = new Tone.Filter({ frequency: 14000 });
 
   /**
    * Each map in array represents a bar and
@@ -116,8 +118,9 @@ class LooperModel {
 
   constructor(private _gain: Tone.Gain) {
     this._bassDrum.connect(this._gain);
-    this._openHiHat.chain(this._filter, this._gain);
-    this._closedHiHat.chain(this._filter, this._gain);
+    this._openHiHat.chain(this._filter14, this._gain);
+    this._closedHiHat.chain(this._filter14, this._gain);
+    this._snareDrum.chain(this._filter11, this._gain);
 
     this._sequence = new Tone.Sequence(
       this._loopNextTick,
